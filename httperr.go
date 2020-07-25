@@ -29,8 +29,8 @@ func Error(w http.ResponseWriter, err error, format string, args ...interface{})
 const (
 	BadRequest = httpErr(http.StatusBadRequest)
 	// StatusUnauthorized is actually Unauthenticated
-	Unauthorized                  = httpErr(http.StatusUnauthorized)
 	Unauthenticated               = httpErr(http.StatusUnauthorized)
+	Unauthorized                  = Unauthenticated // alias
 	PaymentRequired               = httpErr(http.StatusPaymentRequired)
 	Forbidden                     = httpErr(http.StatusForbidden)
 	NotFound                      = httpErr(http.StatusNotFound)
