@@ -1,7 +1,10 @@
 package httperr
 
 import (
+	"errors"
+	"io"
 	"net/http"
+	"os"
 
 	"github.com/zncoder/assert"
 )
@@ -24,6 +27,24 @@ func Error(w http.ResponseWriter, err error, format string, args ...interface{})
 		he = http.StatusInternalServerError
 	}
 	http.Error(w, err.Error(), int(he))
+}
+
+func Is(err error, wants ...error) bool {
+	err = errors.Unwrap(err)
+	for _, e := range wants {
+		if e == err {
+			return true
+		}
+	}
+	return false
+}
+
+func IsEOF(err error) bool {
+	return Is(err, io.EOF)
+}
+
+func IsNotFound(err error) bool {
+	return Is(err, NotFound, os.ErrNotExist)
 }
 
 const (
