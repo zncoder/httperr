@@ -2,6 +2,8 @@ package httperr
 
 import (
 	"net/http"
+
+	"github.com/zncoder/assert"
 )
 
 type httpErr int
@@ -13,6 +15,15 @@ func (he httpErr) Error() string {
 func Code(err error) (int, bool) {
 	he, ok := err.(httpErr)
 	return int(he), ok
+}
+
+func Error(w http.ResponseWriter, err error, format string, args ...interface{}) {
+	assert.OK(err != nil)
+	he, ok := err.(httpErr)
+	if !ok {
+		he = http.StatusInternalServerError
+	}
+	http.Error(w, err.Error(), int(he))
 }
 
 const (
