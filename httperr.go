@@ -24,15 +24,14 @@ func Error(w http.ResponseWriter, err error, format string, args ...interface{})
 	assert.OK(err != nil)
 	he, ok := err.(httpErr)
 	if !ok {
-		he = http.StatusInternalServerError
+		he = InternalServerError
 	}
 	http.Error(w, err.Error(), int(he))
 }
 
 func Is(err error, wants ...error) bool {
-	err = errors.Unwrap(err)
 	for _, e := range wants {
-		if e == err {
+		if errors.Is(err, e) {
 			return true
 		}
 	}
