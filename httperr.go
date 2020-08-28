@@ -20,6 +20,13 @@ func Code(err error) (int, bool) {
 	return int(he), ok
 }
 
+func WithStatus(code int) error {
+	if code == 200 {
+		return nil
+	}
+	return httpErr(code)
+}
+
 func Error(w http.ResponseWriter, err error, format string, args ...interface{}) {
 	assert.OK(err != nil)
 	he, ok := err.(httpErr)
